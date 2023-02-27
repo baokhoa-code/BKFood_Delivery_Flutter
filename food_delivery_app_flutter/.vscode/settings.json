@@ -1,0 +1,14 @@
+{
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true,
+        "editor.fontSize": 16,
+        "dart.openDevTools": "flutter",
+        "editor.fastScrollSensitivity": 8,
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "[dart]": {
+                "editor.tabSize": 6,
+                "editor.insertSpaces": true,
+                "editor.detectIndentation": false,
+            },
+ }
