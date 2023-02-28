@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app_flutter/controllers/cart_controller.dart';
 import 'package:food_delivery_app_flutter/data/repository/popular_product_repo.dart';
 import 'package:food_delivery_app_flutter/utils/colors.dart';
 import 'package:get/get.dart';
 
+import '../models/cart_module.dart';
 import '../models/product_model.dart';
 
 class PopularProductController extends GetxController {
@@ -12,16 +14,18 @@ class PopularProductController extends GetxController {
 
   List<dynamic> _popularProductList = [];
   List<dynamic> get popularProductList => _popularProductList;
+  late CartController _cart;
 
   bool _isLoaded = false;
   bool get isLoaded => _isLoaded;
+  bool _isExist = false;
+  bool get isExist => _isExist;
   int _quantity = 0;
   int get quantity => _quantity;
 
   Future<void> getPopularProductList() async {
     Response response = await popularProductRepo.getPopularProductList();
     if (response.statusCode == 200) {
-      print("got products");
       _popularProductList = [];
       _popularProductList.addAll(Product.fromJson(response.body).products);
       _isLoaded = true;
@@ -39,7 +43,7 @@ class PopularProductController extends GetxController {
   }
 
   int checkQuantity(int quantity) {
-    if (quantity <= 0) {
+    if (quantity < 0) {
       Get.snackbar("Item count", "You can not reduce more !",
           backgroundColor: AppColors.mainColor, colorText: Colors.white);
       return 0;
@@ -52,7 +56,59 @@ class PopularProductController extends GetxController {
     }
   }
 
-  void initProduct() {
+  void initProduct(ProductModel product, CartController cart) {
     _quantity = 0;
+    _cart = cart;
+
+    if (_cart.existInCart(product)) {
+      _isExist = true;
+      _quantity = _cart.getQuantity(product);
+      print("Existed with quantity: " + _quantity.toString());
+    } else {
+      _isExist = false;
+      print("No exist in cart");
+    }
+    print("Items in cart:");
+    _cart.items.forEach((key, value) {
+      print("The id is " +
+          value.id.toString() +
+          " The quantity is " +
+          value.quantity.toString());
+    });
+  }
+
+  void addItem(ProductModel product) {
+    _cart.addItem(product, _quantity);
+    print("Added, updated or deleted item(id; quantity): (" +
+        product.id.toString() +
+        "; " +
+        _quantity.toString() +
+        ")");
+    _quantity = _cart.getQuantity(product);
+    if (_quantity == 0) {
+      _isExist = false;
+    } else {
+      _isExist = true;
+    }
+    _cart.items.forEach((key, value) {
+      print("The id is " +
+          value.id.toString() +
+          " The quantity is " +
+          value.quantity.toString());
+    });
+
+    update();
+  }
+
+  int get totalItems {
+    return _cart.totalItems;
+  }
+
+  int get totalUniqueItems {
+    return _cart.totalUniqueItems;
+  }
+
+  List<CartModel> get getItems {
+    return _cart.getItems;
   }
 }
