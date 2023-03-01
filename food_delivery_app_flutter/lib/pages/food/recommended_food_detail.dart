@@ -201,34 +201,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (controller.quantity == 0 && controller.isExist) {
-                      showCupertinoDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return CupertinoAlertDialog(
-                              title: const Text('Delete Food'),
-                              content: const Text(
-                                  'Are you sure to delete this food from cart?'),
-                              actions: <Widget>[
-                                CupertinoDialogAction(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    controller.addItem(product);
-                                  },
-                                  child: const Text('Yes'),
-                                ),
-                                CupertinoDialogAction(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('No'),
-                                ),
-                              ],
-                            );
-                          });
-                    } else {
-                      controller.addItem(product);
-                    }
+                    controller.addItem(product);
                   },
                   child: Container(
                     padding: EdgeInsets.only(

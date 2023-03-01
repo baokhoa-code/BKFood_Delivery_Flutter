@@ -63,40 +63,21 @@ class PopularProductController extends GetxController {
     if (_cart.existInCart(product)) {
       _isExist = true;
       _quantity = _cart.getQuantity(product);
-      print("Existed with quantity: " + _quantity.toString());
+      // print("Existed with quantity: " + _quantity.toString());
     } else {
       _isExist = false;
-      print("No exist in cart");
+      // print("No exist in cart");
     }
-    print("Items in cart:");
-    _cart.items.forEach((key, value) {
-      print("The id is " +
-          value.id.toString() +
-          " The quantity is " +
-          value.quantity.toString());
-    });
   }
 
   void addItem(ProductModel product) {
     _cart.addItem(product, _quantity);
-    print("Added, updated or deleted item(id; quantity): (" +
-        product.id.toString() +
-        "; " +
-        _quantity.toString() +
-        ")");
     _quantity = _cart.getQuantity(product);
     if (_quantity == 0) {
       _isExist = false;
     } else {
       _isExist = true;
     }
-    _cart.items.forEach((key, value) {
-      print("The id is " +
-          value.id.toString() +
-          " The quantity is " +
-          value.quantity.toString());
-    });
-
     update();
   }
 

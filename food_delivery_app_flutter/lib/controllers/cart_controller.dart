@@ -13,6 +13,8 @@ class CartController extends GetxController {
   Map<int, CartModel> _items = {};
   Map<int, CartModel> get items => _items;
 
+  List<CartModel> storageItems = [];
+
   void addItem(ProductModel product, int quantity) {
     if (_items.containsKey(product.id!)) {
       if (quantity == 0) {
@@ -49,6 +51,7 @@ class CartController extends GetxController {
             backgroundColor: AppColors.mainColor, colorText: Colors.white);
       }
     }
+    cartRepo.addToCartList(getItems);
     update();
   }
 
@@ -83,6 +86,12 @@ class CartController extends GetxController {
     return _items.length;
   }
 
+  List<CartModel> get getItems {
+    return _items.entries.map((e) {
+      return e.value;
+    }).toList();
+  }
+
   int get totalAmount {
     var total = 0;
     _items.forEach((key, value) {
@@ -91,9 +100,39 @@ class CartController extends GetxController {
     return total;
   }
 
-  List<CartModel> get getItems {
-    return _items.entries.map((e) {
-      return e.value;
-    }).toList();
+  List<CartModel> getCartData() {
+    setCart = cartRepo.getCartList();
+    return storageItems;
+  }
+
+  set setCart(List<CartModel> items) {
+    storageItems = items;
+    for (int i = 0; i < storageItems.length; i++) {
+      _items.putIfAbsent(storageItems[i].product!.id!, () => storageItems[i]);
+    }
+  }
+
+  void addToHistory() {
+    cartRepo.addToCartHistoryList();
+    clear();
+  }
+
+  void clear() {
+    _items = {};
+    update();
+  }
+
+  List<CartModel> getCartHistoryList() {
+    return cartRepo.getCartHistoryList();
+  }
+
+  set setItems(Map<int, CartModel> setItems) {
+    _items = {};
+    _items = setItems;
+  }
+
+  void addToCartList() {
+    cartRepo.addToCartList(getItems);
+    update();
   }
 }
