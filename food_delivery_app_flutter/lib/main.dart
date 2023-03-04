@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app_flutter/controllers/popular_product_controller.dart';
 import 'package:food_delivery_app_flutter/controllers/recommended_product_controller.dart';
 import 'package:food_delivery_app_flutter/helper/route_helper.dart';
+import 'package:food_delivery_app_flutter/pages/auth/sign_in_page.dart';
+import 'package:food_delivery_app_flutter/pages/auth/sign_up_page.dart';
 import 'package:get/get.dart';
 import 'controllers/cart_controller.dart';
 import 'helper/dependencies.dart' as dep;
@@ -23,6 +25,7 @@ class MainApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "BKFood",
+          // home: SignInPage(),
           initialRoute: RouteHelper.getSplash(),
           getPages: RouteHelper.routes,
         );

@@ -4,7 +4,7 @@ import 'package:food_delivery_app_flutter/utils/app_constants.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/cart_module.dart';
+import '../../models/cart_model.dart';
 
 class CartRepo {
   final SharedPreferences sharedPreferences;
@@ -34,7 +34,7 @@ class CartRepo {
     List<String> carts = [];
     if (sharedPreferences.containsKey(AppConstants.CART_LIST)) {
       carts = sharedPreferences.getStringList(AppConstants.CART_LIST)!;
-      print("Inside getCartList " + carts.toString());
+      // print("Inside getCartList " + carts.toString());
     }
     List<CartModel> cartList = [];
     carts.forEach(
@@ -77,5 +77,11 @@ class CartRepo {
   void removeCart() {
     cart = [];
     sharedPreferences.remove(AppConstants.CART_LIST);
+  }
+
+  void clearCartHistory() {
+    removeCart();
+    cartHistory = [];
+    sharedPreferences.remove(AppConstants.CART_HISTORY_LIST);
   }
 }

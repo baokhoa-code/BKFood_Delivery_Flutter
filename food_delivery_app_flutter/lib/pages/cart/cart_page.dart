@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app_flutter/base/no_data_page.dart';
+import 'package:food_delivery_app_flutter/controllers/auth_controller.dart';
 import 'package:food_delivery_app_flutter/controllers/cart_controller.dart';
 import 'package:food_delivery_app_flutter/controllers/popular_product_controller.dart';
 import 'package:food_delivery_app_flutter/utils/app_constants.dart';
@@ -11,6 +12,7 @@ import 'package:food_delivery_app_flutter/widgets/big_text.dart';
 import 'package:food_delivery_app_flutter/widgets/small_text.dart';
 import 'package:get/get.dart';
 
+import '../../base/show_custom_message.dart';
 import '../../controllers/recommended_product_controller.dart';
 import '../../helper/route_helper.dart';
 
@@ -343,7 +345,14 @@ class CartPage extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            controller.addToHistory();
+                            if (Get.find<AuthController>().isUserLoggedIn()) {
+                              controller.addToHistory();
+                            } else {
+                              showCustomSnackBar("You need  to login first",
+                                  title: "User Idenfitication",
+                                  color: AppColors.warningColor);
+                              Get.toNamed(RouteHelper.getSinIn());
+                            }
                           },
                           child: Container(
                             padding: EdgeInsets.only(

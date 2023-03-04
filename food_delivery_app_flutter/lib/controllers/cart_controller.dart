@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app_flutter/data/repository/cart_repo.dart';
-import 'package:food_delivery_app_flutter/models/cart_module.dart';
+import 'package:food_delivery_app_flutter/models/cart_model.dart';
 import 'package:food_delivery_app_flutter/models/product_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -133,6 +133,11 @@ class CartController extends GetxController {
 
   void addToCartList() {
     cartRepo.addToCartList(getItems);
+    update();
+  }
+
+  void clearCartHistory() {
+    cartRepo.clearCartHistory();
     update();
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:food_delivery_app_flutter/base/no_data_page.dart';
 import 'package:food_delivery_app_flutter/controllers/cart_controller.dart';
 import 'package:food_delivery_app_flutter/helper/route_helper.dart';
-import 'package:food_delivery_app_flutter/models/cart_module.dart';
+import 'package:food_delivery_app_flutter/models/cart_model.dart';
 import 'package:food_delivery_app_flutter/utils/app_constants.dart';
 import 'package:food_delivery_app_flutter/utils/colors.dart';
 import 'package:food_delivery_app_flutter/utils/dimensions.dart';
@@ -243,10 +243,12 @@ class CartHistory extends StatelessWidget {
                           ),
                         )),
                   )
-                : Container(
+                : SizedBox(
                     height: MediaQuery.of(context).size.height / 1.5,
-                    child: NoDataPage(
-                      text: "You did not buy anything so far !",
+                    child: const Center(
+                      child: NoDataPage(
+                        text: "You did not buy anything so far !",
+                      ),
                     ),
                   );
           }),
