@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:food_delivery_app_flutter/base/custom_loader.dart';
 import 'package:food_delivery_app_flutter/controllers/auth_controller.dart';
 import 'package:food_delivery_app_flutter/controllers/cart_controller.dart';
+import 'package:food_delivery_app_flutter/controllers/location_controller.dart';
 import 'package:food_delivery_app_flutter/controllers/user_controller.dart';
 import 'package:food_delivery_app_flutter/helper/route_helper.dart';
 import 'package:food_delivery_app_flutter/utils/colors.dart';
@@ -35,9 +36,9 @@ class AccountPage extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      body: GetBuilder<UserController>(builder: (controller) {
+      body: GetBuilder<UserController>(builder: (userController) {
         return _userLoggedIn
-            ? (controller.isLoading == false
+            ? (!userController.isLoading
                 ? Container(
                     width: double.maxFinite,
                     margin: EdgeInsets.only(top: Dimensions.height20),
@@ -68,7 +69,7 @@ class AccountPage extends StatelessWidget {
                                     size: Dimensions.height10 * 5,
                                   ),
                                   bigText: BigText(
-                                    text: controller.userModel!.name,
+                                    text: userController.userModel!.name,
                                   )),
                               SizedBox(
                                 height: Dimensions.height20 * 1.5,
@@ -83,7 +84,7 @@ class AccountPage extends StatelessWidget {
                                     size: Dimensions.height10 * 5,
                                   ),
                                   bigText: BigText(
-                                    text: controller.userModel!.phone,
+                                    text: userController.userModel!.phone,
                                   )),
                               SizedBox(
                                 height: Dimensions.height20 * 1.5,
@@ -98,23 +99,53 @@ class AccountPage extends StatelessWidget {
                                     size: Dimensions.height10 * 5,
                                   ),
                                   bigText: BigText(
-                                    text: controller.userModel!.email,
+                                    text: userController.userModel!.email,
                                   )),
                               SizedBox(
                                 height: Dimensions.height20 * 1.5,
                               ),
                               //address
-                              AccountWidget(
-                                  appIcon: AppIcon(
-                                    icon: Icons.location_on,
-                                    backgroundColor: AppColors.yellowColor,
-                                    iconColor: Colors.white,
-                                    iconSize: Dimensions.height10 * 5 / 2,
-                                    size: Dimensions.height10 * 5,
-                                  ),
-                                  bigText: BigText(
-                                    text: "Address",
-                                  )),
+                              GetBuilder<LocationContronller>(
+                                  builder: (locationController) {
+                                if (_userLoggedIn &&
+                                    locationController.addressList.isEmpty) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.offNamed(RouteHelper.getAddAddress());
+                                    },
+                                    child: AccountWidget(
+                                        appIcon: AppIcon(
+                                          icon: Icons.location_on,
+                                          backgroundColor:
+                                              AppColors.yellowColor,
+                                          iconColor: Colors.white,
+                                          iconSize: Dimensions.height10 * 5 / 2,
+                                          size: Dimensions.height10 * 5,
+                                        ),
+                                        bigText: BigText(
+                                          text: "Fill in your addresses",
+                                        )),
+                                  );
+                                } else {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.offNamed(RouteHelper.getAddAddress());
+                                    },
+                                    child: AccountWidget(
+                                        appIcon: AppIcon(
+                                          icon: Icons.location_on,
+                                          backgroundColor:
+                                              AppColors.yellowColor,
+                                          iconColor: Colors.white,
+                                          iconSize: Dimensions.height10 * 5 / 2,
+                                          size: Dimensions.height10 * 5,
+                                        ),
+                                        bigText: BigText(
+                                          text: "Your addresses",
+                                        )),
+                                  );
+                                }
+                              }),
                               SizedBox(
                                 height: Dimensions.height20 * 1.5,
                               ),
@@ -142,6 +173,8 @@ class AccountPage extends StatelessWidget {
                                     Get.find<CartController>().clear();
                                     Get.find<CartController>()
                                         .clearCartHistory();
+                                    Get.find<LocationContronller>()
+                                        .clearAddressList();
                                     showCustomSnackBar("Loggout Success",
                                         title: "Loggout",
                                         color: AppColors.mainColor);
@@ -150,6 +183,7 @@ class AccountPage extends StatelessWidget {
                                     showCustomSnackBar("You logged out",
                                         title: "Loggout",
                                         color: AppColors.warningColor);
+                                    Get.offNamed(RouteHelper.getSinIn());
                                   }
                                 },
                                 child: AccountWidget(

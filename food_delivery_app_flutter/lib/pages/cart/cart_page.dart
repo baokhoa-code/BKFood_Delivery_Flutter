@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app_flutter/base/no_data_page.dart';
 import 'package:food_delivery_app_flutter/controllers/auth_controller.dart';
 import 'package:food_delivery_app_flutter/controllers/cart_controller.dart';
+import 'package:food_delivery_app_flutter/controllers/location_controller.dart';
 import 'package:food_delivery_app_flutter/controllers/popular_product_controller.dart';
 import 'package:food_delivery_app_flutter/utils/app_constants.dart';
 import 'package:food_delivery_app_flutter/utils/colors.dart';
@@ -346,7 +347,16 @@ class CartPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             if (Get.find<AuthController>().isUserLoggedIn()) {
-                              controller.addToHistory();
+                              // controller.addToHistory();
+                              // print("Logged In");
+                              if (Get.find<LocationContronller>()
+                                  .addressList
+                                  .isEmpty) {
+                                Get.toNamed(RouteHelper.getAddAddress());
+                              } else {
+                                // Get.offNamed(RouteHelper.getInitial());
+                                controller.addToHistory();
+                              }
                             } else {
                               showCustomSnackBar("You need  to login first",
                                   title: "User Idenfitication",
